@@ -1,5 +1,5 @@
 import express from "express";
-import { handleGetSession } from './src/handlers/sessionHandler'
+import { submitSessionRequest } from './src/handlers/sessionHandler'
 import { handleWebhook } from './src/handlers/webhookHandler'
 
 // Create the app
@@ -12,7 +12,7 @@ app.use(express.json());
 app.use(express.static('public'));
 
 //When a POST request comes in at path /api/{endpoint}, run...
-app.post('/api/session', handleGetSession);
+app.post('/api/session', submitSessionRequest);
 app.post('/api/webhooks', handleWebhook);
 
 app.listen(3000, () => {
