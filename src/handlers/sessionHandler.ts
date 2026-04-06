@@ -1,11 +1,16 @@
-import { Request, Response} from 'express';
+import { Request, Response } from 'express';
 import { createSession } from '../services/adyenService';
 
 export async function handleGetSession(req: Request, res: Response) {
-    //read from request
+    // Read country code from request
     const { countryCode } = req.body;
 
-    //do work
+    if (!countryCode){
+        res.status(400).send('Country Code undefined');
+        return;
+    }
+
+    // Data mapping
     const currencyMap: Record<string, string> = {
         US: "USD",
         GB: "GBP",
@@ -40,8 +45,14 @@ export async function handleGetSession(req: Request, res: Response) {
     const reference = crypto.randomUUID()
     const value = 1000;
 
-    const session =createSession(countryCode, reference, currency, value);
+    try{
+    const session = await createSession(countryCode, reference, currency, value);
 
     //respond with response
     res.json(session);
+    } catch (error) {
+        res.status(500).send('Failed to create session');
+    }
+
+
 }
