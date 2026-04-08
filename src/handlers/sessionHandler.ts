@@ -41,7 +41,12 @@ export async function submitSessionRequest(req: Request, res: Response) {
         NZ: "NZD"
     }
 
-    const currency = currencyMap[countryCode] ?? "USD";
+    const currency = currencyMap[countryCode];
+
+    if (!currency) {
+        res.status(400).send(`Unsupported country code: ${countryCode}`);
+        return;
+    }
     const reference = crypto.randomUUID()
     const value = 1000;
 
